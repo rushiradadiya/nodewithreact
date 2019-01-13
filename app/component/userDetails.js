@@ -3,8 +3,11 @@ import {FlatList, StyleSheet,
     Text, View, Button,Alert,
     TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
-import {getUser} from "../actions/userAction";
-class user extends PureComponent {
+import Constant from '../helper/themeHelper';
+import {getUser, userRegistration,userdelete} from "../actions/userAction";
+import {NavigationActions, StackActions} from "react-navigation";
+
+class Users extends PureComponent {
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -21,10 +24,8 @@ class user extends PureComponent {
     }
 
     componentDidMount() {
-
-        this.props.getUser();
-        console.log(this.state.userList)
         debugger
+         this.props.getUser();
     }
 
     componentWillReceiveProps(nextProps, nextState){
@@ -49,35 +50,73 @@ class user extends PureComponent {
     };
 
     onRefresh = () => {
-
         this.setState({refreshing: true});
         this.props.getUser().then(res=>{
             this.setState({refreshing: false});
         });
     };
+
+    onRowClick = (id) => {
+
+        debugger
+       // this.props.navigation.navigate('UserDetails',{userDetail: item});
+            Alert.alert(
+                  'Delete',
+                  'conformation',
+                  [
+
+                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: 'OK', onPress: () => {
+                            this.props.userdelete(id).then(res=>{
+
+                                alert("Delete data")
+                                // const {navigation} = this.props;
+                                // navigation.dispatch(StackActions.reset({
+                                //     index: 0,
+                                //     actions: [NavigationActions.navigate({ routeName: 'Users' })],
+                                // }));
+
+                            }).catch(err=>{
+                                alert("Registration failed")
+                            })}},
+                  ],
+                 { cancelable: false }
+                )
+    };
+    // delete = () =>{
+    //     this.props.userRegistration({email, password}).then(res=>{
+    //
+    //         const {navigation} = this.props;
+    //         navigation.dispatch(StackActions.reset({
+    //             index: 0,
+    //             actions: [NavigationActions.navigate({ routeName: 'Users' })],
+    //         }));
+    //
+    //     }).catch(err=>{
+    //         alert("Registration failed")
+    //     })
+    //}
     renderItem = ({item, index}) => {
         const {rowContainer} = styles;
-
-        console.log(this.state.userList)
         return(
-
+            <TouchableOpacity onPress={()=>this.onRowClick(item.id)}>
                 <View key={index} style={rowContainer}>
-                    <Text  style={{fontSize: 30}}>
-                        {item.email}</Text>
+                    <Text style={{fontSize: Constant.fontSize.medium}}>
+                       email: {item.email} Id: {item.id}</Text>
 
                 </View>
-
+            </TouchableOpacity>
         )
     };
 
     render() {
         const {refreshing} = this.state;
         const {userList} = this.props;
-        console.log(userList)
-        alert(JSON.stringify(userList))
+
+        // console.log(this.props);
+
         return (
             <View style={styles.container}>
-
                 <FlatList data={userList}
                           contentContainerStyle={{top:20}}
                           automaticallyAdjustContentInsets={false}
@@ -97,7 +136,7 @@ class user extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'white',
+        backgroundColor: Constant.appColor,
         justifyContent:'center',
     },
     titleText: {
@@ -109,21 +148,22 @@ const styles = StyleSheet.create({
         borderRadius:5,
         padding:10,
         borderWidth:1,
-        backgroundColor:'lightblue',
-        borderColor:'red',
+        borderColor:'#bdbdbd',
         marginLeft:10,
         marginRight:10
     }
 });
 
 const mapStateToProps = (state) => {
-    const {userList} =state.user;
-    debugger;
+    const {userList} = state.user;
     return {
-        userList,
+        userList
     };
 };
 
 export default connect(mapStateToProps,{
-    getUser
-})(user);
+    getUser,
+    userdelete
+})(Users);
+
+

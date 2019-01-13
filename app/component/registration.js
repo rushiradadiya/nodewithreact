@@ -9,6 +9,7 @@ class Registration extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
+
             email: '',
             password: '',
         }
@@ -39,20 +40,22 @@ class Registration extends Component<Props> {
                 <Text style= {styles.title}>User Registration Form</Text>
 
                 <TextInput
-                    placeholder="Email"
-                    onChangeText={firstName => this.setState({firstName})}
+                    placeholder="Enter FirstName"
+                    onChangeText={email => this.setState({email})}
                     underlineColorAndroid='transparent'
                     style={styles.TextInputStyleClass}
                 />
 
                 <TextInput
-                    placeholder="Password"
-                    onChangeText={lastName => this.setState({lastName})}
+                    placeholder="Enter LastName"
+                    onChangeText={password => this.setState({password})}
                     underlineColorAndroid='transparent'
                     style={styles.TextInputStyleClass}
                 />
 
-                <Button title="Register"
+
+
+                <Button title="Click Here To Register"
                         onPress={this.register}
                         disabled={loading}
                         color="#2196F3" />
