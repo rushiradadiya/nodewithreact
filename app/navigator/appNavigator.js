@@ -8,7 +8,7 @@ const appNavigation=createStackNavigator({
 
 },
     {
-        initialRouteName:'Users'
+        initialRouteName:'registration'
     },
 );
 

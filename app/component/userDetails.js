@@ -1,13 +1,13 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {FlatList, StyleSheet,
     Text, View, Button,Alert,
     TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import Constant from '../helper/themeHelper';
-import {getUser, userRegistration,userdelete} from "../actions/userAction";
-import {NavigationActions, StackActions} from "react-navigation";
+import {getUser, userRegistration,userdelete,userUpdate} from "../actions/userAction";
+import { NavigationActions, StackActions } from 'react-navigation';
 
-class Users extends PureComponent {
+class Users extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -24,7 +24,7 @@ class Users extends PureComponent {
     }
 
     componentDidMount() {
-        debugger
+       // debugger
          this.props.getUser();
     }
 
@@ -56,50 +56,34 @@ class Users extends PureComponent {
         });
     };
 
-    onRowClick = (id) => {
+    onRowClick = ({item}) => {
 
-        debugger
-       // this.props.navigation.navigate('UserDetails',{userDetail: item});
             Alert.alert(
                   'Delete',
                   'conformation',
                   [
 
                     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                    {text: 'OK', onPress: () => {
-                            this.props.userdelete(id).then(res=>{
-
-                                alert("Delete data")
-                                // const {navigation} = this.props;
-                                // navigation.dispatch(StackActions.reset({
-                                //     index: 0,
-                                //     actions: [NavigationActions.navigate({ routeName: 'Users' })],
-                                // }));
-
+                    {text: 'DELETE', onPress: () => {
+                            alert("enter")
+                            debugger
+                            this.props.userdelete(item.id).then(res=>{
+                              this.props.getUser()
                             }).catch(err=>{
-                                alert("Registration failed")
+                                alert("delete")
+                                this.props.getUser()
                             })}},
+
                   ],
                  { cancelable: false }
                 )
     };
-    // delete = () =>{
-    //     this.props.userRegistration({email, password}).then(res=>{
-    //
-    //         const {navigation} = this.props;
-    //         navigation.dispatch(StackActions.reset({
-    //             index: 0,
-    //             actions: [NavigationActions.navigate({ routeName: 'Users' })],
-    //         }));
-    //
-    //     }).catch(err=>{
-    //         alert("Registration failed")
-    //     })
-    //}
+
     renderItem = ({item, index}) => {
+
         const {rowContainer} = styles;
         return(
-            <TouchableOpacity onPress={()=>this.onRowClick(item.id)}>
+            <TouchableOpacity onPress={()=>this.onRowClick({item})}>
                 <View key={index} style={rowContainer}>
                     <Text style={{fontSize: Constant.fontSize.medium}}>
                        email: {item.email} Id: {item.id}</Text>
@@ -163,7 +147,8 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps,{
     getUser,
-    userdelete
+    userdelete,
+    userUpdate
 })(Users);
 
 
