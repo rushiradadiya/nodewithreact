@@ -2,12 +2,12 @@ import {createStackNavigator,createAppContainer,createBottomTabNavigator} from '
 import Userdetails from '../component/userDetails';
 import SignUp from '../component/Signup'
 import Login from '../component/Signin'
-import Product from '../component/productAdd'
+import Productapp from '../component/productAdd'
 
 const TabNavigation = createBottomTabNavigator({
         SignUp:SignUp,
         Login:Login,
-        Product:Product
+        Product:Productapp
     },
     {
         initialRouteName:'Product'

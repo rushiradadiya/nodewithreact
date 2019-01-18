@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Container, View, Left, Right, Button, Icon, Item, Input } from 'native-base';
-import { ScrollView,Text ,TouchableOpacity,Switch} from 'react-native';
+import { ScrollView,Text ,TouchableOpacity,Image} from 'react-native';
 import {NavigationActions, StackActions} from "react-navigation";
+
 import {connect} from "react-redux";
 import {userLogin} from "../actions/userAction";
+import ImagePicker from "react-native-image-picker";
+
+
 
 class Login extends Component {
     constructor(props) {
@@ -12,9 +16,13 @@ class Login extends Component {
             email: '',
             password: '',
             hasError: false,
-            errorText: ''
+            errorText: '',
+            avatarSource : null
+
         };
     }
+
+
 
     register = () =>{
         //validation here...
@@ -77,6 +85,13 @@ class Login extends Component {
                         <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
                             <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>SignIn</Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => this.productImage()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
+                            <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>click</Text>
+                        </TouchableOpacity>
+
+                        <Image source={this.state.avatarSource} style={{width:'100%',height:300,margin:10,backgroundColor:"black"}}/>
+
                     </View>
                 </View>
             </Container>
