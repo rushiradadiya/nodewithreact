@@ -1,15 +1,16 @@
-import {SET_PRODUCT_LIST, SET_PRODUCT_DATA, SET_LOADER, DELETE_PRODUCT_DATA, UPDATE_PRODUCT_DATA, SET_LOGIN_DATA} from "./types";
+import {SET_PRODUCT_LIST, SET_PRODUCT_DATA, SET_LOADER, DELETE_PRODUCT_DATA, UPDATE_PRODUCT_DATA, SET_LOGIN_DATA,SET_CATEGORY_LIST,SET_SUB_CATEGORY_LIST} from "./types";
 import ApiConstant from '../helper/apiConstant';
 
 
-export const getproduct = () => {
+export const getCatrgory = () => {
     return (dispatch, getState) => {
-        debugger;
-        return fetch(ApiConstant.baseUrl+ApiConstant.product)
+
+        return fetch(ApiConstant.baseUrl+ApiConstant.category)
             .then((response) => response.json())
             .then((responseJson) => {
+
                 dispatch({
-                    type: SET_PRODUCT_LIST,
+                    type: SET_CATEGORY_LIST,
                     payload: responseJson.result
                 });
                 return Promise.resolve(true);
@@ -19,8 +20,44 @@ export const getproduct = () => {
             });
     };
 };
+export const getSubCatrgory = (id) => {
+    return (dispatch, getState) => {
+       debugger
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcatgory+(id))
+            .then((response) => response.json())
+            .then((responseJson) => {
 
-export const productAdd = (productData) => {
+                dispatch({
+                    type: SET_SUB_CATEGORY_LIST,
+                    payload: responseJson
+                });
+                return Promise.resolve(responseJson);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
+export const getProduct = () => {
+    return (dispatch, getState) => {
+
+        return fetch(ApiConstant.baseUrl+ApiConstant.product)
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                dispatch({
+                    type: SET_PRODUCT_DATA,
+                    payload: responseJson.result
+                });
+                return Promise.resolve(true);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
+export const productAdd = (formdata) => {
+    debugger
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
         return fetch(ApiConstant.baseUrl+ApiConstant.product,
@@ -28,9 +65,9 @@ export const productAdd = (productData) => {
                 method : 'POST',
                 headers : {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type' : 'multipart/form-data',
                 },
-                body: JSON.stringify(productData)
+                body:formdata
             }).then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
@@ -49,6 +86,8 @@ export const productAdd = (productData) => {
             });
     };
 };
+
+
 
 export const productdelete = (id) => {
     return (dispatch, getState) => {

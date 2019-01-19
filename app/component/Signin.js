@@ -86,11 +86,9 @@ class Login extends Component {
                             <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>SignIn</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.productImage()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
-                            <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>click</Text>
-                        </TouchableOpacity>
 
-                        <Image source={this.state.avatarSource} style={{width:'100%',height:300,margin:10,backgroundColor:"black"}}/>
+
+
 
                     </View>
                 </View>

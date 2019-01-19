@@ -1,34 +1,31 @@
 import React, { Component } from 'react';
 import { ScrollView,Text ,TouchableOpacity,Image} from 'react-native';
-import { Container, View, Left, Right, Button, Icon, Item, Input ,Picker} from 'native-base';
+import { Container, View, Left, Title, Header, Icon, Item, Input ,Picker} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import {NavigationActions, StackActions} from "react-navigation";
 import {connect} from "react-redux";
-import {getproduct} from "../actions/productAction"
+import {getCatrgory,getSubCatrgory,productAdd} from "../actions/productAction"
 
- class productAdd extends Component {
+class productadd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           name:'',
-           cid:'',
-           scid:'',
-           qty :0,
-           prize:0,
-           image:'',
-           detail:'',
-           selected: 0,
-           productList: [],
-           avatarSource : null
-    };
+            name:'',
+            qty :0,
+            price:0,
+            detail:'',
+            cid: 0,
+            scid: 0,
+            image : null
+        };
     }
+
     componentDidMount() {
-        this.props.getproduct();
-        alert(this.state.productList)
+        this.props.getCatrgory();
     }
 
     productImage = () =>{
-        debugger
+
         try{
             ImagePicker.showImagePicker({}, (response) => {
                 console.log('Response = ', response);
@@ -41,12 +38,21 @@ import {getproduct} from "../actions/productAction"
                     console.log('User tapped custom button: ', response.customButton);
                 } else {
                     const source = { uri: response.uri };
-                     // alert(JSON.stringify(response.data))
+                    const data = response.data;
+                    // alert(JSON.stringify(response.data))
                     // You can also display the image using data:
                     // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                    /*
+
+                     uploadFile([
+
+                      { name: 'avatar', filename: 'avatar.png', data: this.state.data }
+                    ])
+                    */
+
 
                     this.setState({
-                        avatarSource: source,
+                        image: source,
                     });
                 }
             });
@@ -56,20 +62,38 @@ import {getproduct} from "../actions/productAction"
             console.log(e)
         }
     }
+
     register = () =>{
-        //validation here...
-        if(!this.signup()) {
+        // //validation here...
+        debugger
+        if(!(this.state.name===""||this.state.qty===""||this.state.price===""||this.state.detail===""||this.state.cid===0||this.state.scid===0))
+        {
 
-            const {name, email, password, type} = this.state;
+            debugger
+            const {name, qty, price, detail,cid,scid,image} = this.state;
 
-            this.props.userRegistration({name, email, password, type}).then(res => {
+            const formData = new FormData();
+            formData.append('image',{
+                uri: image,
+                type: 'image/jpeg',
+                name: 'photo.jpg',
+            });
+            formData.append("name",name);
+            formData.append("cid",cid);
+            formData.append("scid",scid);
+            formData.append("qty",qty);
+            formData.append("price",price);
+            formData.append("detail",detail);
+
+
+            this.props.productAdd(formData).then(res => {
                 debugger
-             //   alert(res)
-                const {navigation} = this.props;
-                navigation.dispatch(StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Login'})],
-                }));
+                   alert(res)
+                // const {navigation} = this.props;
+                // navigation.dispatch(StackActions.reset({
+                //     index: 0,
+                //     actions: [NavigationActions.navigate({routeName: 'Login'})],
+                // }));
 
             }).catch(err => {
                 alert("catch" + res)
@@ -77,10 +101,15 @@ import {getproduct} from "../actions/productAction"
                 alert("Registration failed")
             })
         }
+        else
+        {
+            this.setState({hasError: true, errorText: 'Please fill all fields !'});
+        }
     };
 
 
     render() {
+        const {categoryList,subcategoryList} = this.props;
 
         return(
             <Container style={{backgroundColor: '#fdfdfd'}}>
@@ -93,26 +122,26 @@ import {getproduct} from "../actions/productAction"
                         </View>
                         <View style={{alignItems:"center", width: '100%'}}>
                             <TouchableOpacity onPress={() => this.productImage()} >
-                            <Image source={this.state.avatarSource}  style={{borderRadius:50,width:100,height:100,marginLeft:20,backgroundColor:"#475766"}}/>
+                                <Image source={this.state.image}  style={{borderRadius:100,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
                             </TouchableOpacity>
                         </View>
 
                         <Item>
                             <Icon active name='ios-basket' style={{color: '#687373'}} />
-                            <Input placeholder='name' onChangeText={(email) => this.setState({email: email})} keyboardType="number-pad" placeholderTextColor="#687373" />
+                            <Input placeholder='name' onChangeText={(text) => this.setState({name: text})} keyboardType="number-pad" placeholderTextColor="#687373" />
                         </Item>
                         <Item>
                             <Icon active name='ios-add-circle' style={{color: '#687373'}} />
-                            <Input placeholder='Quantity' onChangeText={(name) => this.setState({name: name})} key placeholderTextColor="#687373" />
+                            <Input placeholder='Quantity' onChangeText={(text) => this.setState({qty: text})} key placeholderTextColor="#687373" />
                         </Item>
 
                         <Item>
                             <Icon active name='ios-lock' style={{color: '#687373'}} />
-                            <Input placeholder='Price' onChangeText={(password) => this.setState({password: password})}  placeholderTextColor="#687373" />
+                            <Input placeholder='Price' onChangeText={(text) => this.setState({price: text})}  placeholderTextColor="#687373" />
                         </Item>
                         <Item>
                             <Icon active name='ios-create' style={{color: '#687373'}} />
-                            <Input placeholder='Detail' onChangeText={(rePassword) => this.setState({rePassword: rePassword})}  placeholderTextColor="#687373" />
+                            <Input placeholder='Detail' onChangeText={(text) => this.setState({detail: text})}  placeholderTextColor="#687373" />
                         </Item>
 
                         <Item >
@@ -123,21 +152,45 @@ import {getproduct} from "../actions/productAction"
                                 iosIcon={<Icon name="arrow-down" />}
                                 textStyle={{ color: "#687373" }}
                                 mode="dropdown"
-                                selectedValue={this.state.selected}
+                                selectedValue={this.state.cid}
                                 onValueChange= {(value) => {
-                                    this.setState({ selected: value });
+                                    this.setState({ cid: value });
+
+                                    console.log(value)
+                                    this.props.getSubCatrgory(value);
+
                                 }}>
-                                {this.state.productList.map((item, index) => {
-                                    return (<Picker.Item label={item} value={index} key={index}/>)
+                                {categoryList.map((item,index) => {
+                                    return (<Picker.Item label={item.name} value={item.id} key={index}/>)
                                 })}
                             </Picker>
 
                         </Item>
 
+                        <Item >
+                            <Icon active name='ios-list' style={{color: '#687373'}} />
+
+                            <Input placeholder='Sub Category' disabled={true} secureTextEntry={true} placeholderTextColor="#687373" />
+                            <Picker
+                                iosIcon={<Icon name="arrow-down" />}
+                                textStyle={{ color: "#687373" }}
+                                mode="dropdown"
+                                selectedValue={this.state.scid}
+                                onValueChange= {(value) => {
+                                    this.setState({ scid: value });
+                                }}>
+                                {
+                                    subcategoryList.map((item,index) => {
+                                        return (<Picker.Item label={item.name} value={item.id} key={index}/>)
+                                    })
+                                }
+                            </Picker>
+
+                        </Item>
 
                         {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
                         <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
-                            <TouchableOpacity onPress={() => this.productImage()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
+                            <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
                                 <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Submit</Text>
                             </TouchableOpacity>
                         </View>
@@ -146,45 +199,20 @@ import {getproduct} from "../actions/productAction"
             </Container>
         );
     }
-
-    // signup() {
-    //     if(this.state.email===""||this.state.name===""||this.state.password===""||this.state.rePassword==="") {
-    //         this.setState({hasError: true, errorText: 'Please fill all fields !'});
-    //         return true;
-    //     }
-    //     if(!this.verifyEmail(this.state.email)) {
-    //         this.setState({hasError: true, errorText: 'Please enter a valid email address !'});
-    //         return true;
-    //     }
-    //
-    //     if(this.state.password.length < 6) {
-    //         this.setState({hasError: true, errorText: 'Passwords must contains at least 6 characters !'});
-    //         return true;
-    //     }
-    //     if(this.state.password !== this.state.rePassword) {
-    //         this.setState({hasError: true, errorText: 'Passwords does not match !'});
-    //         return true;
-    //     }
-    //     return false;
-    //     this.setState({hasError: false});
-    //     //  Actions.home();
-    // }
-    //
-    // verifyEmail(email) {
-    //     var reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //     return reg.test(email);
-    // }
-
-
 }
 
 const mapStateToProps = (state) => {
-    const {productList} = state.product;
+    const {categoryList} = state.product;
+    const {subcategoryList} = state.product;
     return {
-        productList
+        categoryList,
+        subcategoryList
     };
 };
 
 export default connect(mapStateToProps,{
-    getproduct
-})(productAdd);
+    getCatrgory,
+    getSubCatrgory,
+    productAdd
+
+})(productadd);

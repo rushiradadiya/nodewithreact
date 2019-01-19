@@ -1,36 +1,6 @@
 import {SET_USER_LIST, SET_USER_DATA, SET_LOADER, DELETE_USER_DATA, UPDATE_USER_DATA, SET_LOGIN_DATA} from "./types";
 import ApiConstant from '../helper/apiConstant';
 
-// export const userLogin = (userData) => {
-//     debugger
-//     return (dispatch, getState) => {
-//         dispatch({type: SET_LOADER,payload: true});
-//         return fetch(ApiConstant.baseUrl+ApiConstant.login,
-//             {
-//                 method : 'POST',
-//                 headers : {
-//                     'Accept': 'application/json',
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify(userData)
-//             }).then((response) => response.json())
-//             .then((responseJson) => {
-//                 dispatch({type: SET_LOADER,payload: false});
-//                 dispatch({
-//                     type: USER_SIGNIN,
-//                     payload: responseJson.result
-//                 });
-//                 return Promise.resolve(responseJson);
-//             })
-//             .catch((error) => {
-//                 dispatch({
-//                     type: SET_LOADER,
-//                     payload: false
-//                 });
-//                 return Promise.reject(error);
-//             });
-//     };
-// };
 export const userLogin = (loginData) => {
     return (dispatch, getState) => {
         return fetch(ApiConstant.baseUrl+ApiConstant.login,
