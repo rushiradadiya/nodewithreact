@@ -8,8 +8,17 @@ import {userLogin} from "../actions/userAction";
 import ImagePicker from "react-native-image-picker";
 
 
-
 class Login extends Component {
+    static navigationOptions = {
+        title: 'Pronóstico Actual',
+        header: () => ({
+            titleStyle: {
+                color: '#FFFFFF',
+            },
+            tintColor: '#0087B7',
+        }),
+    }
+
     constructor(props) {
         super(props);
         this.state = {

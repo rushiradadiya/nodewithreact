@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { ScrollView,Text ,TouchableOpacity,Image} from 'react-native';
-import { Container, View, Left, Title, Header, Icon, Item, Input ,Picker} from 'native-base';
+import {Container, View, Left, Title, Header, Icon, Item, Input, Picker, Button, Right} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import {NavigationActions, StackActions} from "react-navigation";
+import Navbar from '../component/Navbar';
+
 import {connect} from "react-redux";
 import {getCatrgory,getSubCatrgory,productAdd} from "../actions/productAction"
 
@@ -110,10 +112,25 @@ class productadd extends Component {
 
     render() {
         const {categoryList,subcategoryList} = this.props;
-
+        var left = (
+            <Left style={{flex:1}}>
+                <Button onPress={() => Actions.pop()} transparent>
+                    <Icon name='ios-arrow-back' />
+                </Button>
+            </Left>
+        );
+        var right = (
+            <Right style={{flex:1}}>
+                <Button onPress={() => Actions.search()} transparent>
+                    <Icon name='ios-search-outline' />
+                </Button>
+                <Button onPress={() => Actions.cart()} transparent>
+                    <Icon name='ios-cart' />
+                </Button>
+            </Right>)
         return(
             <Container style={{backgroundColor: '#fdfdfd'}}>
-
+                {/*<Navbar left={left} right={right} title="SIGN UP" />*/}
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                         <View style={{marginBottom: 20,alignItems:"center", width: '100%'}}>
