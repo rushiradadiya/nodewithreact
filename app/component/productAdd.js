@@ -6,7 +6,7 @@ import {NavigationActions, StackActions} from "react-navigation";
 import Navbar from '../component/Navbar';
 
 import {connect} from "react-redux";
-import {getCatrgory,getSubCatrgory,productAdd} from "../actions/productAction"
+import {getCategory,getSubCategory,productAdd} from "../actions/productAction"
 
 class productadd extends Component {
     constructor(props) {
@@ -23,7 +23,8 @@ class productadd extends Component {
     }
 
     componentDidMount() {
-        this.props.getCatrgory();
+        this.props.getCategory();
+
     }
 
     productImage = () =>{
@@ -41,18 +42,6 @@ class productadd extends Component {
                 } else {
                     const source = { uri: response.uri };
                     const data = response.data;
-                    // alert(JSON.stringify(response.data))
-                    // You can also display the image using data:
-                    // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                    /*
-
-                     uploadFile([
-
-                      { name: 'avatar', filename: 'avatar.png', data: this.state.data }
-                    ])
-                    */
-
-
                     this.setState({
                         image: source,
                     });
@@ -112,25 +101,17 @@ class productadd extends Component {
 
     render() {
         const {categoryList,subcategoryList} = this.props;
-        var left = (
-            <Left style={{flex:1}}>
-                <Button onPress={() => Actions.pop()} transparent>
-                    <Icon name='ios-arrow-back' />
-                </Button>
-            </Left>
-        );
+
         var right = (
             <Right style={{flex:1}}>
-                <Button onPress={() => Actions.search()} transparent>
-                    <Icon name='ios-search-outline' />
-                </Button>
+
                 <Button onPress={() => Actions.cart()} transparent>
-                    <Icon name='ios-cart' />
+                    <Icon name='ios-cart' style={{color: '#FFF'}}/>
                 </Button>
             </Right>)
         return(
             <Container style={{backgroundColor: '#fdfdfd'}}>
-                {/*<Navbar left={left} right={right} title="SIGN UP" />*/}
+                <Navbar right={right} title="SIGN UP" />
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                         <View style={{marginBottom: 20,alignItems:"center", width: '100%'}}>
@@ -139,7 +120,7 @@ class productadd extends Component {
                         </View>
                         <View style={{alignItems:"center", width: '100%'}}>
                             <TouchableOpacity onPress={() => this.productImage()} >
-                                <Image source={this.state.image}  style={{borderRadius:100,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
+                                <Image source={this.state.image}  style={{borderRadius:50,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
                             </TouchableOpacity>
                         </View>
 
@@ -228,8 +209,8 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps,{
-    getCatrgory,
-    getSubCatrgory,
+    getCategory,
+    getSubCategory,
     productAdd
 
 })(productadd);

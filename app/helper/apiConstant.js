@@ -3,6 +3,8 @@ module.exports = {
     user: 'user/',
     login :'login/',
     product:'product/',
+    productSubcat:'product/subcat/',
     category:'categ/',
-    subcatgory:'subcat/cat/'
+    subcatgorycat:'subcat/cat/',
+    subcat:'subcat/'
 };

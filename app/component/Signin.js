@@ -27,12 +27,8 @@ class Login extends Component {
             hasError: false,
             errorText: '',
             avatarSource : null
-
         };
     }
-
-
-
     register = () =>{
         //validation here...
 

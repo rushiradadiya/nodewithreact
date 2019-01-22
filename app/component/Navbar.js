@@ -1,18 +1,5 @@
-/**
-* This is the navbar component
-* example of usage:
-*   var left = (<Left><Button transparent><Icon name='menu' /></Button></Left>);
-*   var right = (<Right><Button transparent><Icon name='menu' /></Button></Right>);
-*   <Navbar left={left} right={right} title="My Navbar" />
-**/
-
-// React native and others libraries imports
 import React, { Component } from 'react';
 import { Header, Body, Title, Left, Right, Icon } from 'native-base';
-
-// Our custom files and classes import
-
-
 export default class Navbar extends Component {
   render() {
     return(

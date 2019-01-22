@@ -2,7 +2,7 @@ import {SET_PRODUCT_LIST, SET_PRODUCT_DATA, SET_LOADER, DELETE_PRODUCT_DATA, UPD
 import ApiConstant from '../helper/apiConstant';
 
 
-export const getCatrgory = () => {
+export const getCategory = () => {
     return (dispatch, getState) => {
 
         return fetch(ApiConstant.baseUrl+ApiConstant.category)
@@ -20,10 +20,28 @@ export const getCatrgory = () => {
             });
     };
 };
-export const getSubCatrgory = (id) => {
+export const getSubCategory = () => {
     return (dispatch, getState) => {
        debugger
-        return fetch(ApiConstant.baseUrl+ApiConstant.subcatgory+(id))
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcat)
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                dispatch({
+                    type: SET_SUB_CATEGORY_LIST,
+                    payload: responseJson.result
+                });
+                return Promise.resolve(responseJson);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
+export const getSubCategoryId = (id) => {
+    return (dispatch, getState) => {
+        debugger
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcatgorycat+(id))
             .then((response) => response.json())
             .then((responseJson) => {
 
@@ -56,6 +74,7 @@ export const getProduct = () => {
             });
     };
 };
+
 export const productAdd = (formdata) => {
     debugger
     return (dispatch, getState) => {
@@ -87,7 +106,24 @@ export const productAdd = (formdata) => {
     };
 };
 
+export const getProductID = (id) => {
+    return (dispatch, getState) => {
 
+        return fetch(ApiConstant.baseUrl+ApiConstant.productSubcat+(id))
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                dispatch({
+                    type: SET_PRODUCT_DATA,
+                    payload: responseJson.result
+                });
+                return Promise.resolve(true);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
 
 export const productdelete = (id) => {
     return (dispatch, getState) => {
