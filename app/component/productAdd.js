@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { ScrollView,Text ,TouchableOpacity,Image} from 'react-native';
 import {Container, View, Left, Title, Header, Icon, Item, Input, Picker, Button, Right} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
-import {NavigationActions, StackActions} from "react-navigation";
+import Spinner from 'react-native-gifted-spinner';
 import Navbar from '../component/Navbar';
-
+import ImageResizer from 'react-native-image-resizer';
 import {connect} from "react-redux";
 import {getCategory,getSubCategory,productAdd} from "../actions/productAction"
 
@@ -18,15 +18,13 @@ class productadd extends Component {
             detail:'',
             cid: 0,
             scid: 0,
-            image : null
+
         };
     }
 
     componentDidMount() {
         this.props.getCategory();
-
     }
-
     productImage = () =>{
 
         try{
@@ -45,6 +43,9 @@ class productadd extends Component {
                     this.setState({
                         image: source,
                     });
+                    debugger
+                   // alert(source.uri)
+                    this.resize()
                 }
             });
 
@@ -53,7 +54,20 @@ class productadd extends Component {
             console.log(e)
         }
     }
+    resize() {
 
+        ImageResizer.createResizedImage(this.state.image.uri, 8, 6, 'JPEG', 80)
+            .then(({ uri }) => {
+                this.setState({
+                    resizedImageUri: uri,
+                });
+
+            })
+            .catch(err => {
+                console.log(err);
+                return alert(err+'  Unable to resize the photo', 'Check the console for full the error message'+(source));
+            });
+    }
     register = () =>{
         // //validation here...
         debugger
@@ -120,8 +134,10 @@ class productadd extends Component {
                         </View>
                         <View style={{alignItems:"center", width: '100%'}}>
                             <TouchableOpacity onPress={() => this.productImage()} >
-                                <Image source={this.state.image}  style={{borderRadius:50,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
+                                 <Image source={this.state.image}  style={{borderRadius:50,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
+
                             </TouchableOpacity>
+                            <Image source={this.state.resizedImageUri}  style={{borderRadius:50,width:100,height:100,marginLeft:20,backgroundColor:"#475766"}}/>
                         </View>
 
                         <Item>

@@ -1,18 +1,26 @@
-import {createStackNavigator,createAppContainer,createBottomTabNavigator,createMaterialTopTabNavigator,Dimensions,StackNavigator,DrawerNavigator,MaterialTopTabBar} from 'react-navigation';
+import {
+    createStackNavigator,
+    createAppContainer,
+    createBottomTabNavigator,
+    Dimensions,
+    StackNavigator,
+    DrawerNavigator,
+} from 'react-navigation';
 import Userdetails from '../component/userDetails';
 import SignUp from '../component/Signup'
 import Login from '../component/Signin'
 import Productapp from '../component/productAdd'
+import ProductView from '../component/ProductView';
+import ProductDetails from '../component/ProductDetails'
+import ProductItemDetails from '../component/ProductItemDetails'
 import IconI from "react-native-vector-icons/Ionicons";
 import IconF from "react-native-vector-icons/FontAwesome";
-import Home from '../component/Home'
+import Home from '../component/Home.js'
 import React from "react";
-
-
 const TabNavigator = createBottomTabNavigator({
     Home:{screen:Home},
-    Product:{screen:Productapp},
-
+    Product:{screen:ProductView},
+    // ProductDetails:{screen:ProductDetails}
 },{
     initialRouteName:'Home',
     defaultNavigationOptions: ({ navigation }) => ({
@@ -45,50 +53,16 @@ const TabNavigator = createBottomTabNavigator({
 
         }
     }});
-// const AppNavigator = createStackNavigator({
-//     Product: { screen: Productapp}, // MainTab is itself a TabNavigator now
-//     SignUp: {screen: SignUp},
-//
-// },{
-//     initialRouteName: "SignUp",
-//    // headerMode: 'none'
-// });
-
-//
-//
-// const MainTab = createMaterialTopTabNavigator(
-//     {
-//         Home: Home,
-//         Product: Productapp,
-//         SignUp:SignUp
-//     },
-//     {
-//         // headerMode:'none',
-//         tabBarOptions: {
-//             scrollEnabled: true,
-//             labelStyle: {
-//                 fontSize: 12,
-//             },
-//             style: {
-//                 backgroundColor: '#475766',
-//             },
-//             indicatorStyle: {
-//                 backgroundColor: '#687373 '
-//             }
-//         }
-//     },
-//
-// );
-
-//
 const primary = createStackNavigator({
 
     Product: { screen: Productapp}, // MainTab is itself a TabNavigator now
     SignUp: {screen: SignUp},
-
+    ProductView:{screen:ProductView},
+    ProductDetails:{screen:ProductDetails},
+    ProductItem:{screen:ProductItemDetails},
      TabBar : TabNavigator,
 },{
-    initialRouteName:'TabBar',
+    initialRouteName:'Product',
     headerMode:'none'
 
 })

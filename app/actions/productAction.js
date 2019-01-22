@@ -47,7 +47,7 @@ export const getSubCategoryId = (id) => {
 
                 dispatch({
                     type: SET_SUB_CATEGORY_LIST,
-                    payload: responseJson
+                    payload: responseJson.result
                 });
                 return Promise.resolve(responseJson);
             })

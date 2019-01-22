@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet, Alert,TouchableHighlight} from 'react-native';
-import {Container, Right, Card, CardItem, Text, Button, Icon, Picker, Left} from 'native-base';
+import {Container, Right, Card, CardItem, Text, Button, Icon, Picker, Left, Content} from 'native-base';
 import {connect} from "react-redux";
 import {getProduct, getSubCategory,getSubCategoryId,getCategory,getProductID} from "../actions/productAction"
 import Navbar from '../component/Navbar';
@@ -19,41 +19,34 @@ class Home extends Component {
         debugger
         this.props.getCategory();
         this.props.getSubCategory();
+        this.props.getProduct();
     }
     onCatRowClick = ({item}) => {
         this.props.getSubCategoryId(item.id);
     };
     onSubCatRowClick = ({item}) => {
-        this.props.getProductID(item.id);
+        const {navigate} = this.props.navigation;
+        this.props.getProductID(item.id).then(res => {
+            if(res) {
+                navigate('ProductDetails', {productDetail: this.props.productData});
+            }
+        })
     };
 
-    renderGridItem = (item) => (
-        <View style={styles.item}>
-            <View style={styles.flex} />
-            <Text style={styles.name}>
-                MAN
-            </Text>
-        </View>
-    );
+    renderItem = ({item, index}) => {
 
-    // renderGridItem = () => {
-    //     const {productData} = this.props
-    //     productData.map((item,index) => {
-    //         const {rowContainer} = styles;
-    //         var imageUrl = item.image.split("/");
-    //         var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
-    //         return ( <TouchableHighlight onPress={()=>{
-    //             this.getSubCategoryId(item.id);
-    //
-    //         }}>
-    //             <View key={index} style={{height:50,width:50,backgroundColor:"black"}} >
-    //                 <Image source={{uri:url}} style={{ width:50,height:50,backgroundColor:"#475766"}}/>
-    //                 <Text>{item.name}</Text>
-    //             </View>
-    //
-    //         </TouchableHighlight>)
-    //     })
-    //     }
+        const {rowContainer} = styles;
+        var imageUrl = item.image.split("/");
+        var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
+        return(
+            <TouchableOpacity onPress={()=>this.onRowClick({item})} style={styles.rowContainer}>
+                <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+
+                    <Image source={{ uri: url}}  style={styles.imageThumbnail}/>
+                </View>
+            </TouchableOpacity>
+        )
+    };
 
     render() {
         var left = (
@@ -78,10 +71,12 @@ class Home extends Component {
                 </Button>
             </Right>)
         const {productData,subcategoryList,categoryList} = this.props;
+
         return (
-                <Container >
-                    <Navbar right={right} left={left} title="Home" />
-                    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
+                <Container>
+                    <Navbar left={left} right={right} title="MY STORE" />
+                    <Content>
                         <Card style={{backgroundColor:"yellow"}}>
                             <CardItem header style={{backgroundColor:"#9ca7a7"}} >
                                 <Icon name='ios-basket' style={{color: '#475766'}}/>
@@ -95,16 +90,13 @@ class Home extends Component {
                                                 const {rowContainer} = styles;
                                                 var imageUrl = item.image.split("/");
                                                 var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
-                                                return ( <TouchableHighlight onPress={()=>{
-                                                    this.getSubCategoryId(item);
-
-                                                }}>
+                                                return ( <TouchableOpacity onPress={()=>this.onCatRowClick({item})}>
                                                     <View key={index} style={rowContainer} >
                                                         <Image source={{uri:url}} style={{ width:50,height:50,backgroundColor:"#475766"}}/>
                                                         <Text>{item.name}</Text>
                                                     </View>
 
-                                                </TouchableHighlight>)
+                                                </TouchableOpacity>)
                                             })
                                         }
 
@@ -137,21 +129,30 @@ class Home extends Component {
                                     </ScrollView>
                                 }
                             </CardItem>
-                        <CardItem>
+                            <CardItem header style={{backgroundColor:"#9ca7a7"}} >
+                                <Icon name='ios-basket' style={{color: '#475766'}}/>
+                                <Text>Product</Text>
+                            </CardItem>
 
-                        </CardItem>
-                            <GridLayout
-                                items={productData}
-                                itemsPerRow={3}
-                                style={{backgroundColor:"pink"}}
-                                renderItem={this.renderGridItem}
-                            />
+
                         </Card>
-
-
-
-                    </ScrollView>
+                        <ScrollView>
+                            <FlatList data={productData}
+                                      numColumns={2}
+                                      contentContainerStyle={{top:20}}
+                                      automaticallyAdjustContentInsets={false}
+                                      renderItem={this.renderItem}
+                                      keyExtractor={this.keyExtractor}
+                                      ItemSeparatorComponent={this.renderSeparator}
+                                      ListEmptyComponent={this.renderEmpty}
+                                      ListFooterComponent={<View style={{ height: 50}}/>}
+                            />
+                        </ScrollView>
+                    </Content>
                 </Container>
+
+
+
 
         );
 
@@ -176,18 +177,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center'
     },
-    flex: {
-        flex: 1,
-    },
-    item: {
-        height: 150,
-        backgroundColor: '#CCCCCC',
-        padding: 10,
-    },
-    name: {
-        fontSize: 12,
-        textAlign: 'center',
-        color: '#000000'
+    imageThumbnail: {
+        backgroundColor:"orange",
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 100,
+        width:100
     },
 });
 
