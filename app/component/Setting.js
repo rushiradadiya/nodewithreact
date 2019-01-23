@@ -37,31 +37,29 @@ class Login extends Component {
             const {email, password} = this.state;
 
             this.props.userLogin({ email, password}).then(result => {
-                const type = JSON.stringify(result.type)
-                alert(type)
-               if(result)
-               {
-                   debugger
-                   if(type=="true") {
-                       alert("admin")
-                       const {navigation} = this.props;
-                       navigation.dispatch(StackActions.reset({
-                           index: 0,
-                           actions: [NavigationActions.navigate({routeName: 'AdminTabBar'})],
-                       }));
-                   }
-                   else {
-                       const {navigation} = this.props;
-                       alert("user")
-                       navigation.dispatch(StackActions.reset({
-                           index: 0,
-                           actions: [NavigationActions.navigate({routeName: 'UserTabBar'})],
-                       }));
-                   }
-               }
-               else {
-                   alert("Email and Password Wrong");
-               }
+
+                alert(JSON.stringify(result.type))
+                if(result)
+                {
+                    if(JSON.stringify(result.type)) {
+                        alert("admin")
+                        const {navigation} = this.props;
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({routeName: 'TabBar'})],
+                        }));
+                    }
+                    else {
+                        const {navigation} = this.props;
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({routeName: 'Users'})],
+                        }));
+                    }
+                }
+                else {
+                    alert("Email and Password Wrong");
+                }
 
             }).catch(err => {
                 alert("catch" + res)
@@ -92,16 +90,14 @@ class Login extends Component {
                         <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
                             <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>SignIn</Text>
                         </TouchableOpacity>
+                        <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Create new Account</Text>
+
+
+
+
+
+
                     </View>
-                    <TouchableOpacity onPress={() => {
-                        const {navigate} = this.props.navigation;
-                        navigate('SignUp');
-
-
-                    }} style={{ marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
-
-                    <Text style={{color: 'black',textAlign: "center"}}>Create new Account</Text>
-                    </TouchableOpacity>
                 </View>
             </Container>
         );

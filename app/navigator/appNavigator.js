@@ -6,21 +6,59 @@ import {
     StackNavigator,
     DrawerNavigator,
 } from 'react-navigation';
-import Userdetails from '../component/userDetails';
 import SignUp from '../component/Signup'
 import Login from '../component/Signin'
 import Productapp from '../component/productAdd'
 import ProductView from '../component/ProductView';
-import ProductDetails from '../component/ProductDetails'
-import ProductItemDetails from '../component/ProductItemDetails'
+import Profile from'../component/Setting'
 import IconI from "react-native-vector-icons/Ionicons";
 import IconF from "react-native-vector-icons/FontAwesome";
 import Home from '../component/Home.js'
 import React from "react";
-const TabNavigator = createBottomTabNavigator({
+const AdminTabNavigator = createBottomTabNavigator({
+    Product:{screen:Productapp},
+    ProductView:{screen:ProductView},
+    Profile:{screen:Profile}
+},{
+    initialRouteName:'ProductView',
+    defaultNavigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, horizontal, tintColor }) => {
+            const { routeName } = navigation.state;
+            let IconComponent;
+            let iconName;
+            if (routeName === 'Product') {
+                IconComponent= IconI;
+                iconName = 'ios-home';
+
+            }else if(routeName ==='ProductView'){
+                IconComponent = IconF;
+                iconName = 'shopping-cart';
+            }
+            else if(routeName ==='Profile'){
+                IconComponent = IconF;
+                iconName = 'ios-settings';
+            }
+            return <IconComponent name={iconName} size={25} color={tintColor} />;
+        },
+    }),
+    tabBarOptions: {
+        activeTintColor: '#ECB953',
+        inactiveTintColor: '#FFFFFF',
+        style: {
+            height: 60,
+            paddingVertical: 5,
+            backgroundColor: "#475766"
+        },
+        labelStyle: {
+            fontSize: 12,
+            lineHeight: 20,
+
+        }
+    }});
+
+const UserTabNavigator = createBottomTabNavigator({
     Home:{screen:Home},
-    Product:{screen:ProductView},
-    // ProductDetails:{screen:ProductDetails}
+    Profile:{screen:Setting}
 },{
     initialRouteName:'Home',
     defaultNavigationOptions: ({ navigation }) => ({
@@ -31,10 +69,10 @@ const TabNavigator = createBottomTabNavigator({
             if (routeName === 'Home') {
                 IconComponent= IconI;
                 iconName = 'ios-home';
-
-            }else if(routeName ==='Product'){
+            }
+            else if(routeName ==='Profile'){
                 IconComponent = IconF;
-                iconName = 'shopping-cart';
+                iconName = 'ios-settings';
             }
             return <IconComponent name={iconName} size={25} color={tintColor} />;
         },
@@ -54,15 +92,12 @@ const TabNavigator = createBottomTabNavigator({
         }
     }});
 const primary = createStackNavigator({
-
-    Product: { screen: Productapp}, // MainTab is itself a TabNavigator now
+    Login:{screen:Login},
     SignUp: {screen: SignUp},
-    ProductView:{screen:ProductView},
-    ProductDetails:{screen:ProductDetails},
-    ProductItem:{screen:ProductItemDetails},
-     TabBar : TabNavigator,
+    AdminTabBar : AdminTabNavigator,
+    UserTabBar:UserTabNavigator
 },{
-    initialRouteName:'Product',
+    initialRouteName:'Login',
     headerMode:'none'
 
 })
