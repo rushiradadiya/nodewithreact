@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { ScrollView,Text ,TouchableOpacity,Switch} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, Switch, ImageBackground} from 'react-native';
 import { Container, View, Left, Right, Button, Icon, Item, Input ,Radio,ListItem} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import IconM from 'react-native-vector-icons/MaterialIcons';
+import IconA from 'react-native-vector-icons/AntDesign'
 import {NavigationActions, StackActions} from "react-navigation";
 import {connect} from "react-redux";
 import {userRegistration, userUpdate} from "../actions/userAction";
+import Constant from "../helper/themeHelper";
 
 
 
@@ -61,13 +63,22 @@ render() {
     let red="rgba(245,60,60,0.8)"
     let light="rgba(255,255,255,0.5)"
     return(
-        <Container style={{backgroundColor: '#fdfdfd'}}>
+        <Container >
 
-            <ScrollView contentContainerStyle={{flexGrow: 1}}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
 
+                {/*<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>*/}
+
+                    <ImageBackground source={require('../image/background.jpg')}
+                                     resizeMode={"repeat"}
+                                     style={{
+                                         width: Constant.screenWidth,
+                                         height: Constant.screenWidth * 10.67,
+                                         opacity: 0.9,
+                                         flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50
+                                     }}>
+                        {/*<ScrollView contentContainerStyle={{flexGrow: 1}}>*/}
                     <Animatable.View animation="swing" iterationCount={100} direction="alternate">
-                        <IconM active name='shopping-cart' style={{color: '#687373'}} size={100}/>
+                        <IconA active name='shoppingcart' style={{color: '#bb888e'}} size={100}/>
                     </Animatable.View>
 
 
@@ -108,8 +119,19 @@ render() {
                             <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Signup</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            </ScrollView>
+                        <TouchableOpacity onPress={() => {
+                            const {navigate} = this.props.navigation;
+                            navigate('Login');
+
+
+                        }} style={{ marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
+
+                            <Text style={{color: 'black',textAlign: "center"}}>Click to Sign In </Text>
+                        </TouchableOpacity>
+                {/*</View>*/}
+                        {/*</ScrollView>*/}
+                    </ImageBackground>
+
         </Container>
     );
 }

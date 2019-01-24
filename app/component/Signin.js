@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Container, View, Left, Right, Button, Icon, Item, Input } from 'native-base';
-import { ScrollView,Text ,TouchableOpacity,Image} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, ImageBackground,Image, Animated,AsyncStorage} from 'react-native';
 import {NavigationActions, StackActions} from "react-navigation";
 
 import {connect} from "react-redux";
 import {userLogin} from "../actions/userAction";
-import ImagePicker from "react-native-image-picker";
+import Constant from '../helper/themeHelper';
 
 
 class Login extends Component {
@@ -18,6 +18,32 @@ class Login extends Component {
             tintColor: '#0087B7',
         }),
     }
+    componentDidMount(): void {
+        AsyncStorage.getItem('@LOGIN').then((data) => {
+            const type = JSON.parse(data).type
+debugger
+            if(data)
+            {
+                debugger
+                if(type==true) {
+
+                    const {navigation} = this.props;
+                    navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'AdminTabBar'})],
+                    }));
+                }
+                else {
+                    const {navigation} = this.props;
+                    alert("user")
+                    navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'UserTabBar'})],
+                    }));
+                }
+            }
+        })
+    }
 
     constructor(props) {
         super(props);
@@ -26,8 +52,9 @@ class Login extends Component {
             password: '',
             hasError: false,
             errorText: '',
-            avatarSource : null
+            avatarSource : null,
         };
+        this.animatedValue = new Animated.ValueXY(0, 0);
     }
     register = () =>{
         //validation here...
@@ -38,30 +65,38 @@ class Login extends Component {
 
             this.props.userLogin({ email, password}).then(result => {
                 const type = JSON.stringify(result.type)
-                alert(type)
-               if(result)
-               {
-                   debugger
-                   if(type=="true") {
-                       alert("admin")
-                       const {navigation} = this.props;
-                       navigation.dispatch(StackActions.reset({
-                           index: 0,
-                           actions: [NavigationActions.navigate({routeName: 'AdminTabBar'})],
-                       }));
-                   }
-                   else {
-                       const {navigation} = this.props;
-                       alert("user")
-                       navigation.dispatch(StackActions.reset({
-                           index: 0,
-                           actions: [NavigationActions.navigate({routeName: 'UserTabBar'})],
-                       }));
-                   }
-               }
-               else {
-                   alert("Email and Password Wrong");
-               }
+                alert(JSON.stringify(result))
+
+                try {
+                    AsyncStorage.setItem("@LOGIN", JSON.stringify(result));
+                } catch (error) {
+
+                    console.log("Error while saving data");
+                }
+
+
+                if(result)
+                {
+                    debugger
+                    if(type=="true") {
+                        const {navigation} = this.props;
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({routeName: 'AdminTabBar'})],
+                        }));
+                    }
+                    else {
+                        const {navigation} = this.props;
+                        alert("user")
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({routeName: 'UserTabBar'})],
+                        }));
+                    }
+                }
+                else {
+                    alert("Email and Password Wrong");
+                }
 
             }).catch(err => {
                 alert("catch" + res)
@@ -70,14 +105,24 @@ class Login extends Component {
             })
         }
     };
+
     render() {
 
         return(
-            <Container style={{backgroundColor: '#fdfdfd'}}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
+            <Container >
+
+                <ImageBackground source={require('../image/background.jpg')}
+                                 resizeMode={"repeat"}
+                                 style={{
+                                     width: Constant.screenWidth,
+                                     height: Constant.screenWidth * 10.67,
+                                     opacity: 0.9,
+                                     flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50
+                                 }}>
+
                     <View style={{marginBottom: 35, width: '100%',alignItems:"center",justifyContent:"center"}}>
-                        <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#2c3e50"}}>Welcome </Text>
-                        <Text style={{fontSize: 18, textAlign: 'center', width: '100%', color: '#687373'}}>Login to continue </Text>
+                        <Text style={{fontSize: 30, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#687373",fontFamily:"Zapfino"}}>First Cart </Text>
+                        <Text style={{fontSize: 18, textAlign: 'center', width: '100%', color: '#030303'}}>Login to continue </Text>
                     </View>
                     <Item>
                         <Icon active name='ios-person' style={{color: "#687373"}}  />
@@ -89,8 +134,15 @@ class Login extends Component {
                     </Item>
                     {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
                     <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
-                        <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
-                            <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>SignIn</Text>
+                        <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#5a3e42", margin: 20,width:'100%',height:30,alignItems: 'center',justifyContent:'center',
+                            shadowColor: 'black',
+                            shadowOffset: {
+                                width: 3,
+                                height: 3
+                            },
+                            shadowRadius: 5,
+                            shadowOpacity: 5.0}}>
+                            <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Sign In</Text>
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => {
@@ -100,9 +152,9 @@ class Login extends Component {
 
                     }} style={{ marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
 
-                    <Text style={{color: 'black',textAlign: "center"}}>Create new Account</Text>
+                        <Text style={{color: 'black',textAlign: "center"}}>Create new Account</Text>
                     </TouchableOpacity>
-                </View>
+                </ImageBackground>
             </Container>
         );
     }

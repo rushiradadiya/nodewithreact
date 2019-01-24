@@ -111,33 +111,46 @@ class productadd extends Component {
             this.setState({hasError: true, errorText: 'Please fill all fields !'});
         }
     };
-
+    reset = () =>{
+        this.setState({
+            image: null,
+        });
+    }
 
     render() {
         const {categoryList,subcategoryList} = this.props;
 
-        var right = (
-            <Right style={{flex:1}}>
-
-                <Button onPress={() => Actions.cart()} transparent>
-                    <Icon name='ios-cart' style={{color: '#FFF'}}/>
-                </Button>
-            </Right>)
         return(
             <Container style={{backgroundColor: '#fdfdfd'}}>
-                <Navbar right={right} title="SIGN UP" />
+                <Navbar  title="Product Add" />
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                         <View style={{marginBottom: 20,alignItems:"center", width: '100%'}}>
                             {/*<Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#2c3e50"}}>Product </Text>*/}
 
                         </View>
-                        <View style={{alignItems:"center", width: '100%'}}>
+                        <View style={{alignItems:"baseline", width: '100%',flexDirection:"row"}}>
                             <TouchableOpacity onPress={() => this.productImage()} >
-                                 <Image source={this.state.image}  style={{borderRadius:50,width:200,height:200,marginLeft:20,backgroundColor:"#475766"}}/>
-
+                                 <Image source={this.state.image}  style={{borderRadius:50,width:150,height:150,marginLeft:20,backgroundColor:"#e5e3e9", shadowColor: 'black',
+                                     shadowOffset: {
+                                         width: 3,
+                                         height: 3
+                                     },
+                                     shadowRadius: 5,
+                                     shadowOpacity: 5.0}}/>
                             </TouchableOpacity>
-                            <Image source={this.state.resizedImageUri}  style={{borderRadius:50,width:100,height:100,marginLeft:20,backgroundColor:"#475766"}}/>
+                            <TouchableOpacity onPress={() => this.reset()} style={{backgroundColor: "#5a3e42", margin: 20,width:80,height:30,alignItems: 'center',justifyContent:'center',
+                                shadowColor: 'black',
+                                shadowOffset: {
+                                    width: 3,
+                                    height: 3
+                                },
+                                shadowRadius: 5,
+                                shadowOpacity: 5.0}}>
+
+                            <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Reset</Text>
+                            </TouchableOpacity>
+                            {/*<Image source={this.state.resizedImageUri}  style={{borderRadius:50,width:100,height:100,marginLeft:20,backgroundColor:"#475766"}}/>*/}
                         </View>
 
                         <Item>
@@ -204,7 +217,14 @@ class productadd extends Component {
 
                         {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
                         <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
-                            <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#2c3e50", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
+                            <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "#5a3e42", margin: 20,width:'100%',height:30,alignItems: 'center',justifyContent:'center',
+                                shadowColor: 'black',
+                                shadowOffset: {
+                                    width: 3,
+                                    height: 3
+                                },
+                                shadowRadius: 5,
+                                shadowOpacity: 5.0}}>
                                 <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Submit</Text>
                             </TouchableOpacity>
                         </View>

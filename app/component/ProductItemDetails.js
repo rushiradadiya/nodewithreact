@@ -3,6 +3,7 @@ import {FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet, Alert,T
 import {Container, Right, Text,   Picker, Left, Content} from 'native-base';
 import Navbar from '../component/Navbar';
 import Constant from "../helper/themeHelper";
+import LinearGradient from 'react-native-linear-gradient'
 const {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
@@ -15,49 +16,36 @@ export default class Home extends Component {
             productDetail :[]
         };
     }
-    componentDidMount() {
-        debugger
-
-    }
-    onRowClick = ({item}) => {
-        const {navigate} = this.props.navigation;
-        alert(item.name)
-        // navigate('ProductDetails',{productDetail: item});
-    };
-    renderItem = ({item,index}) => {
-        const {rowContainer} = styles;
-        var imageUrl = item.image.split("/");
-        var url = "http://localhost:4000/" + imageUrl[imageUrl.length - 1].toString();
-        return (
-            <TouchableOpacity onPress={() => this.onRowClick({item})} style={{width: 150,
-                height:150,margin:20 }}>
-                <View style={{rowContainer}}>
-
-                    <Image source={{uri: url}} style={styles.imageThumbnail}/>
-                </View>
-            </TouchableOpacity>
-        )
-    };
-    render() {
+       render() {
         const {navigation} = this.props;
         const  productDetail  = navigation.getParam('productDetail', 'NO-ID')
         var imageUrl = productDetail.image.split("/");
         var url = "http://localhost:4000/" + imageUrl[imageUrl.length - 1].toString();
         return (
             <Container>
-                <Navbar  title="MY STORE" />
-                <Content>
+                <Navbar  title="First Cart" />
 
-                    <ScrollView>
-                        <View style={{alignItems: 'center'}}>
-                            <Image source={{uri: url}} style={styles.imageThumbnail}/>
-                            <Text style={{fontSize: 25}}>Name:{productDetail.name}</Text>
-                            <Text style={{fontSize: 25}}>Price:{productDetail.price}</Text>
-                            <Text style={{fontSize: 25}}>Detail:{productDetail.detail}</Text>
-                        </View>
-                    </ScrollView>
+                <LinearGradient
+                    colors={['#ffe4e9', '#ffccd2', '#bb888e']}
+                    style={{  borderRadius: 5 ,height:SCREEN_HEIGHT}}>
 
-                </Content>
+                    <Image source={{uri: url}} style={styles.imageThumbnail}/>
+                    <Text style={{fontSize: 20,margin:10}}>Name:{productDetail.name}</Text>
+                    <Text style={{fontSize: 15,margin:10}}>M.R.P:₹ {productDetail.price}</Text>
+                    <Text style={{fontSize: 15,margin:10}}>Detail:{productDetail.detail}</Text>
+                    <TouchableOpacity style={{backgroundColor: "#5a3e42", margin: 20,height:30,alignItems: 'center',justifyContent:'center',
+                        shadowColor: 'black',
+                        shadowOffset: {
+                            width: 3,
+                            height: 3
+                        },
+                        shadowRadius: 5,
+                        shadowOpacity: 5.0}}>
+                        <Text style={{color: '#fdfdfd',textAlign: 'center'}}>Add to Cart</Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+
+
             </Container>
         );
 
@@ -75,18 +63,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 20
     },
-    rowContainer: {
-        flexDirection: 'column',
-        margin:10,
-        backgroundColor:"pink",
-        width: 100,
-        height:200
-    },
     imageThumbnail: {
         backgroundColor:"orange",
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height:(SCREEN_HEIGHT*50)/100
+        height:(SCREEN_HEIGHT*30)/100
     },
 });

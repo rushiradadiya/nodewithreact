@@ -3,6 +3,7 @@ import ApiConstant from '../helper/apiConstant';
 
 
 export const getCategory = () => {
+    debugger
     return (dispatch, getState) => {
 
         return fetch(ApiConstant.baseUrl+ApiConstant.category)

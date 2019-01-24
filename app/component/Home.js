@@ -5,7 +5,8 @@ import {connect} from "react-redux";
 import {getProduct, getSubCategory,getSubCategoryId,getCategory,getProductID} from "../actions/productAction"
 import Navbar from '../component/Navbar';
 import Constant from "../helper/themeHelper";
-import GridLayout from 'react-native-layout-grid';
+import ImageSlider from 'react-native-image-slider';
+import LinearGradient from 'react-native-linear-gradient'
 
 
 class Home extends Component {
@@ -13,7 +14,8 @@ class Home extends Component {
         super()
         this.state = {
             isLoading: false,
-        };
+            images: []
+        }
     }
     componentDidMount() {
         debugger
@@ -40,9 +42,9 @@ class Home extends Component {
         var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
         return(
             <TouchableOpacity onPress={()=>this.onRowClick({item})} style={styles.rowContainer}>
-                <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-
+                <View style={{ flex: 1,  margin: 1,alignItems:'center' }}>
                     <Image source={{ uri: url}}  style={styles.imageThumbnail}/>
+                    <Text>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -74,86 +76,126 @@ class Home extends Component {
 
         return (
 
-                <Container>
-                    <Navbar left={left} right={right} title="MY STORE" />
-                    <Content>
-                        <Card style={{backgroundColor:"yellow"}}>
-                            <CardItem header style={{backgroundColor:"#9ca7a7"}} >
-                                <Icon name='ios-basket' style={{color: '#475766'}}/>
-                                <Text>Category</Text>
-                            </CardItem>
-                            <CardItem >
-                                {
-                                    <ScrollView horizontal={true}>
-                                        {
-                                            categoryList.map((item,index) => {
-                                                const {rowContainer} = styles;
-                                                var imageUrl = item.image.split("/");
-                                                var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
-                                                return ( <TouchableOpacity onPress={()=>this.onCatRowClick({item})}>
-                                                    <View key={index} style={rowContainer} >
-                                                        <Image source={{uri:url}} style={{ width:50,height:50,backgroundColor:"#475766"}}/>
-                                                        <Text>{item.name}</Text>
-                                                    </View>
+            <Container>
+                <Navbar left={left} right={right} title="First Cart" />
+                <View style={{ flex: 1,backgroundColor:"pink"}}>
+                    <ScrollView>
+                        <LinearGradient
+                            colors={['#ffe4e9', '#ffccd2', '#bb888e']}
+                            style={{ padding: 3, alignItems: 'center', borderRadius: 5 }}>
 
-                                                </TouchableOpacity>)
-                                            })
-                                        }
 
+                            <Card style={{borderColor:"#5a3e42",width:'100%'}}>
+
+                                {/*<CardItem>*/}
+                                {/*<ImageSlider*/}
+                                {/*loopBothSides*/}
+                                {/*autoPlayWithInterval={3000}*/}
+                                {/*images={images}*/}
+                                {/*customSlide={({ index, item, style, width }) => (*/}
+                                {/*// It's important to put style here because it's got offset inside*/}
+                                {/*<View key={index} style={[style, styles.customSlide]}>*/}
+                                {/*<Image source={{ uri: item }} style={styles.customImage} />*/}
+                                {/*</View>*/}
+                                {/*)}*/}
+                                {/*customButtons={(position, move) => (*/}
+                                {/*<View style={styles.buttons}>*/}
+                                {/*{images.map((image, index) => {*/}
+                                {/*return (*/}
+                                {/*<TouchableHighlight*/}
+                                {/*key={index}*/}
+                                {/*underlayColor="#ccc"*/}
+                                {/*onPress={() => move(index)}*/}
+                                {/*style={styles.button}*/}
+                                {/*>*/}
+                                {/*<Text style={position === index && styles.buttonSelected}>*/}
+                                {/*{index + 1}*/}
+                                {/*</Text>*/}
+                                {/*</TouchableHighlight>*/}
+                                {/*);*/}
+                                {/*})}*/}
+                                {/*</View>*/}
+                                {/*)}*/}
+                                {/*/>*/}
+                                {/*</CardItem>*/}
+                                <CardItem header style={{backgroundColor:"#BB888E"}} >
+                                    <Icon name='ios-basket' style={{color: '#475766'}}/>
+                                    <Text>Category</Text>
+                                </CardItem>
+                                <CardItem >
+                                    {
+                                        <ScrollView horizontal={true}>
+                                            {
+                                                categoryList.map((item,index) => {
+                                                    const {rowContainer} = styles;
+                                                    var imageUrl = item.image.split("/");
+                                                    var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
+                                                    return ( <TouchableOpacity onPress={()=>this.onCatRowClick({item})}>
+                                                        <View key={index} style={rowContainer} >
+                                                            <Image source={{uri:url}} style={{ width:100,height:150,backgroundColor:"#475766"}}/>
+                                                            <Text>{item.name}</Text>
+                                                        </View>
+
+                                                    </TouchableOpacity>)
+                                                })
+                                            }
+
+                                        </ScrollView>
+                                    }
+                                </CardItem>
+
+
+                                <CardItem header style={{backgroundColor:"#BB888E"}} >
+                                    <Icon name='ios-basket' style={{color: '#475766'}}/>
+                                    <Text>Sub Category</Text>
+                                </CardItem>
+                                <CardItem>
+                                    {
+                                        <ScrollView horizontal={true}>
+                                            {
+                                                subcategoryList.map((item,index) => {
+                                                    const {rowContainer} = styles;
+                                                    var imageUrl = item.image.split("/");
+                                                    var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
+                                                    return ( <TouchableOpacity onPress={()=>this.onSubCatRowClick({item})}>
+                                                        <View key={index} style={rowContainer}>
+                                                            <Image source={{uri:url}} style={{width:100,height:150,backgroundColor:"#475766"}}/>
+                                                            <Text>{item.name}</Text>
+                                                        </View>
+
+                                                    </TouchableOpacity>)
+                                                })
+                                            }
+                                        </ScrollView>
+                                    }
+                                </CardItem>
+                                <CardItem header style={{backgroundColor:"#BB888E"}} >
+                                    <Icon name='ios-basket' style={{color: '#475766'}}/>
+                                    <Text>Product</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <ScrollView>
+                                        <FlatList data={productData}
+                                                  numColumns={2}
+                                                  contentContainerStyle={{top:20}}
+                                                  automaticallyAdjustContentInsets={false}
+                                                  renderItem={this.renderItem}
+                                                  keyExtractor={this.keyExtractor}
+                                                  ItemSeparatorComponent={this.renderSeparator}
+                                                  ListEmptyComponent={this.renderEmpty}
+                                                  ListFooterComponent={<View style={{ height: 50}}/>}
+                                        />
                                     </ScrollView>
-                                }
-                            </CardItem>
+                                </CardItem>
 
-
-                            <CardItem header style={{backgroundColor:"#9ca7a7"}} >
-                                <Icon name='ios-basket' style={{color: '#475766'}}/>
-                                <Text>Sub Category</Text>
-                            </CardItem>
-                            <CardItem>
-                                {
-                                    <ScrollView horizontal={true}>
-                                        {
-                                            subcategoryList.map((item,index) => {
-                                                const {rowContainer} = styles;
-                                                var imageUrl = item.image.split("/");
-                                                var url = "http://localhost:4000/"+imageUrl[imageUrl.length-1].toString();
-                                                return ( <TouchableOpacity onPress={()=>this.onSubCatRowClick({item})}>
-                                                    <View key={index} style={rowContainer}>
-                                                        <Image source={{uri:url}} style={{width:50,height:50,backgroundColor:"#475766"}}/>
-                                                        <Text>{item.name}</Text>
-                                                    </View>
-
-                                                </TouchableOpacity>)
-                                            })
-                                        }
-                                    </ScrollView>
-                                }
-                            </CardItem>
-                            <CardItem header style={{backgroundColor:"#9ca7a7"}} >
-                                <Icon name='ios-basket' style={{color: '#475766'}}/>
-                                <Text>Product</Text>
-                            </CardItem>
-
-
-                        </Card>
-                        <ScrollView>
-                            <FlatList data={productData}
-                                      numColumns={2}
-                                      contentContainerStyle={{top:20}}
-                                      automaticallyAdjustContentInsets={false}
-                                      renderItem={this.renderItem}
-                                      keyExtractor={this.keyExtractor}
-                                      ItemSeparatorComponent={this.renderSeparator}
-                                      ListEmptyComponent={this.renderEmpty}
-                                      ListFooterComponent={<View style={{ height: 50}}/>}
-                            />
-                        </ScrollView>
-                    </Content>
-                </Container>
+                            </Card>
 
 
 
-
+                        </LinearGradient>
+                    </ScrollView>
+                </View>
+            </Container>
         );
 
     }
@@ -171,18 +213,20 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     rowContainer: {
-
-        marginLeft:10,
-        marginRight:10,
+        borderColor:"#5a3e42",
+        borderWidth:2,
+        marginLeft:20,
+        marginRight:20,
+        marginBottom:20,
         justifyContent: 'center',
         alignItems:'center'
     },
     imageThumbnail: {
-        backgroundColor:"orange",
         justifyContent: 'center',
         alignItems: 'center',
-        height: 100,
-        width:100
+        height: 150,
+        width:120,
+
     },
 });
 

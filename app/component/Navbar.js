@@ -5,7 +5,7 @@ export default class Navbar extends Component {
     return(
       <Header
         style={{backgroundColor: "#475766"}}
-        backgroundColor="#475766"
+        backgroundColor="#5a3e42"
         noShadow={true}
         >
         {this.props.left ? this.props.left : <Left style={{flex: 1}} />}

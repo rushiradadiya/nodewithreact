@@ -3,6 +3,7 @@ import {FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet, Alert,T
 import {Container, Right, Text,   Picker, Left, Content} from 'native-base';
 import Navbar from '../component/Navbar';
 import Constant from "../helper/themeHelper";
+import LinearGradient from 'react-native-linear-gradient'
 const {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
@@ -23,15 +24,14 @@ export default class Home extends Component {
             var imageUrl = item.image.split("/");
             var url = "http://localhost:4000/" + imageUrl[imageUrl.length - 1].toString();
             return (
-                <TouchableOpacity onPress={() => this.onRowClick({item})} style={{width: 150,
-                    height:150,margin:20,alignItems:'center' }}>
-                    <View style={{rowContainer}}>
-
-                        <Image source={{uri: url}} style={styles.imageThumbnail}/>
-
-                        </View>
-                    <Text>{item.name}</Text>
+                <TouchableOpacity onPress={()=>this.onRowClick({item})} style={styles.rowContainer}>
+                    <View style={{ flex: 1,  margin: 1,alignItems:'center',shadowColor: '#5a3e42'}}>
+                        <Image source={{ uri: url}}  style={styles.imageThumbnail}/>
+                    </View>
+                    <Text style={{fontSize:20}}>{item.name}</Text>
+                    <Text>₹ {item.price}</Text>
                 </TouchableOpacity>
+
             )
     };
     render() {
@@ -39,8 +39,10 @@ export default class Home extends Component {
         const  productDetail  = navigation.getParam('productDetail', 'NO-ID')
         return (
             <Container>
-                <Navbar  title="MY STORE" />
-                <Content>
+                <Navbar  title="First Cart" style={{fontFamily:"Zapfino"}} />
+                <LinearGradient
+                    colors={['#ffe4e9', '#ffccd2', '#bb888e']}
+                    style={{  alignItems: 'center', borderRadius: 5 ,height:SCREEN_HEIGHT}}>
                     <ScrollView>
                         <FlatList data={productDetail}
                                   numColumns={2}
@@ -54,7 +56,7 @@ export default class Home extends Component {
                         />
                     </ScrollView>
 
-                </Content>
+                </LinearGradient>
             </Container>
         );
 
@@ -73,17 +75,25 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     rowContainer: {
-        margin:20,
-        backgroundColor:"pink",
-        width: 100,
-        height:200,
-        alignItems: "center"
+        fontSize:20,
+        marginLeft:10,
+        marginRight:10,
+        marginBottom:10,
+        justifyContent: 'center',
+        alignItems:'center',
+        shadowColor: '#5a3e42',
+        shadowOffset: {
+            width: 3,
+            height: 3
+        },
+        shadowRadius: 5,
+        shadowOpacity: 5.0
     },
     imageThumbnail: {
-        backgroundColor:"orange",
         justifyContent: 'center',
         alignItems: 'center',
-        width: 150,
-        height:150
+        height: 200,
+        width:130,
+
     },
 });
